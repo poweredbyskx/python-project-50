@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "hexlet-code"
+version = "0.1.0"
+description = ""
+authors = ["poweredbyskx <poweredbyskx@gmail.com>"]
+readme = "README.md"
+packages = [
+  { include = "hexlet_code" },  # Указываем, что основной пакет называется hexlet_code
+]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^7.1.1"
+pytest = "^8.3.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.poetry.scripts]
+gendiff = "hexlet_code.scripts.gendiff:main"
