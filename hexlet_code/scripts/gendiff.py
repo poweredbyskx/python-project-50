@@ -15,7 +15,6 @@ def generate_diff(file_path1, file_path2):
 
     result = []
 
-
     for key in all_keys:
         if key in data1 and key not in data2:
             result.append(f"  - {key}: {data1[key]}")
@@ -26,7 +25,6 @@ def generate_diff(file_path1, file_path2):
         else:
             result.append(f"  - {key}: {data1[key]}")
             result.append(f"  + {key}: {data2[key]}")
-
 
     return "{\n" + "\n".join(result) + "\n}"
 
@@ -41,10 +39,10 @@ def main():
 
     args = parser.parse_args()
 
-
     diff = generate_diff(args.first_file, args.second_file)
 
     print(diff)
+
 
 if __name__ == '__main__':
     main()
