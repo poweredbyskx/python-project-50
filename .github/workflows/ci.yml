@@ -29,3 +29,10 @@ jobs:
 
       - name: Run tests
         run: poetry run pytest --cov=hexlet_code --cov-report=xml
+
+      - name: Upload coverage to Code Climate
+        run: |
+           coverage report
+           coverage xml
+           bash <(curl -s https://codeclimate.com/test_reports) -t ${{ secrets.CC_TEST_REPORTER_ID }} -r
+
