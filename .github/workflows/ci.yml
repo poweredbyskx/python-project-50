@@ -16,19 +16,21 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.x'
+          python-version: '3.12'  # или используйте '3.x', если хотите последнюю версию Python 3
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "::add-path::${HOME}/.local/bin"
 
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install coverage
+        run: poetry install
 
       - name: Run tests with coverage
         run: |
-          coverage run -m pytest
-          coverage report
-          coverage xml
+          poetry run coverage run -m pytest
+          poetry run coverage report
+          poetry run coverage xml
 
       - name: Upload coverage to Code Climate
         env:
