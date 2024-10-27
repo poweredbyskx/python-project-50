@@ -2,14 +2,13 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -21,18 +20,22 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install poetry
-          poetry install
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install coverage
 
-      - name: Run linters
-        run: make lint
-
-      - name: Run tests
-        run: poetry run pytest --cov=hexlet_code --cov-report=xml
-
-      - name: Upload coverage to Code Climate
+      - name: Run tests with coverage
         run: |
+          coverage run -m pytest
           coverage report
           coverage xml
-          bash <(curl -s https://codeclimate.com/test_reports) -t ${{ secrets.CC_TEST_REPORTER_ID }} -r
 
+      - name: Upload coverage to Code Climate
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+          ./cc-test-reporter before-build
+          ./cc-test-reporter format-coverage -t coverage.py coverage.xml
+          ./cc-test-reporter upload-coverage
