@@ -1,18 +1,26 @@
-import argparse
 import json
-
+import yaml
 
 def read_json(file_path):
-    with open(file_path) as file:
+    with open(file_path, 'r') as file:
         return json.load(file)
 
+def read_yaml(file_path):
+    with open(file_path, 'r') as file:
+        return yaml.safe_load(file)
 
-def generate_diff(file_path1, file_path2):
-    data1 = read_json(file_path1)
-    data2 = read_json(file_path2)
+def generate_diff(file1, file2):
+    if file1.endswith('.yml') or file1.endswith('.yaml'):
+        data1 = read_yaml(file1)
+    else:
+        data1 = read_json(file1)
+
+    if file2.endswith('.yml') or file2.endswith('.yaml'):
+        data2 = read_yaml(file2)
+    else:
+        data2 = read_json(file2)
 
     all_keys = sorted(data1.keys() | data2.keys())
-
     result = []
 
     for key in all_keys:
@@ -26,23 +34,7 @@ def generate_diff(file_path1, file_path2):
             result.append(f"  - {key}: {data1[key]}")
             result.append(f"  + {key}: {data2[key]}")
 
-    return "{\n" + "\n".join(result) + "\n}"
+    output = "{\n" + "\n".join(result) + "\n}"
+    output = output.replace("True", "true").replace("False", "false")
 
-
-def main():
-    parser = argparse.ArgumentParser(
-        description='Compares two configuration files and shows a difference.'
-    )
-    parser.add_argument('first_file', help='First configuration file')
-    parser.add_argument('second_file', help='Second configuration file')
-    parser.add_argument('-f', '--format', default='plain', help='Set format of output')
-
-    args = parser.parse_args()
-
-    diff = generate_diff(args.first_file, args.second_file)
-
-    print(diff)
-
-
-if __name__ == '__main__':
-    main()
+    return output
