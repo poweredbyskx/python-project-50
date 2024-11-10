@@ -5,7 +5,7 @@ description = ""
 authors = ["poweredbyskx <poweredbyskx@gmail.com>"]
 readme = "README.md"
 packages = [
-  { include = "hexlet_code" },  # Указываем, что основной пакет называется hexlet_code
+  { include = "gendiff" },
 ]
 
 [tool.poetry.dependencies]
@@ -24,4 +24,4 @@ build-backend = "poetry.core.masonry.api"
 
 
 [tool.poetry.scripts]
-gendiff = "hexlet_code.scripts.gendiff:main"
+gendiff = "gendiff.scripts.gendiff:main"

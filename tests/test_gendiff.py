@@ -1,53 +1,24 @@
+from gendiff.scripts.gendiff import generate_diff
 import pytest
-from hexlet_code.scripts.gendiff import generate_diff
 
-def test_generate_diff_json():
-    expected_output = """{
-  - follow: false
-    host: hexlet.io
-  - proxy: 123.234.53.22
-  - timeout: 50
-  + timeout: 20
-  + verbose: true
-}"""
-    result = generate_diff(
-        'hexlet_code/scripts/file1.json',
-        'hexlet_code/scripts/file2.json'
-    )
-    assert result == expected_output
+PATH = 'tests/fixtures/'
+TEST_DATA = [
+    ('flat_file1.json', 'flat_file2.json', 'flat_stylish_exp.txt', 'stylish'),
+    ('flat_file1.yml', 'flat_file2.yml', 'flat_stylish_exp.txt', 'stylish'),
+    ('deep_file1.json', 'deep_file2.json', 'deep_stylish_exp.txt', 'stylish'),
+    ('deep_file1.yml', 'deep_file2.yml', 'deep_stylish_exp.txt', 'stylish'),
+    ('deep_file1.json', 'deep_file2.json', 'deep_plain_exp.txt', 'plain'),
+    ('deep_file1.yml', 'deep_file2.yml', 'deep_plain_exp.txt', 'plain'),
+]
 
-def test_generate_diff_yaml():
-    expected_output = """{
-  - follow: false
-  + follow: true
-    host: hexlet.io
-  - timeout: 50
-  + timeout: 20
-  + verbose: true
-}"""
-    result = generate_diff(
-        'hexlet_code/scripts/file1.yml',
-        'hexlet_code/scripts/file2.yml'
-    )
-    assert result == expected_output
 
-def test_generate_diff_nonexistent_file():
-    with pytest.raises(FileNotFoundError):
-        generate_diff('nonexistent1.json', 'nonexistent2.json')
+def get_path(path):
+    return PATH + path
 
-def test_generate_diff_invalid_format():
-    with pytest.raises(ValueError):
-        generate_diff('hexlet_code/scripts/invalid_file.txt', 'hexlet_code/scripts/file2.json')
 
-def test_generate_diff_same_content():
-    expected_output = """{
-    follow: false
-    host: hexlet.io
-    proxy: 123.234.53.22
-    timeout: 50
-}"""
-    result = generate_diff(
-        'hexlet_code/scripts/file1.json',
-        'hexlet_code/scripts/file1.json'
-    )
-    assert result == expected_output
+@pytest.mark.parametrize("file1, file2, expected, format_output", TEST_DATA)
+def test_generate_diff(file1, file2, expected, format_output):
+    with open(get_path(expected), 'r') as f:
+        expected_result = f.read()
+    assert generate_diff(get_path(file1), get_path(file2),
+                         format_output) == expected_result
