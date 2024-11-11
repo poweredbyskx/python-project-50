@@ -19,4 +19,3 @@ def get_type(ext):
             return 'json'
         case _:
             raise ValueError(f"This extension is not supported - {ext}")
-
