@@ -8,8 +8,7 @@ from gendiff.parser import parse
 
 def get_argument():
     parser = argparse.ArgumentParser(
-        description='Compares two configuration files and shows a difference.'
-    )
+        description='Compares two configuration files and shows a difference.')
     parser.add_argument('first_file')
     parser.add_argument('second_file')
     parser.add_argument(
@@ -26,6 +25,7 @@ def generate_diff(path1, path2, format='stylish'):
     dict2 = parse(*get_content(path2))
     tree = get_ast_tree(dict1, dict2)
 
+    # import json
     # print(json.dumps(tree, indent=4))
 
     result = format_tree(tree, format)
