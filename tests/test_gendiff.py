@@ -20,4 +20,5 @@ def get_path(path):
 def test_generate_diff(file1, file2, expected, format_output):
     with open(get_path(expected), 'r') as f:
         expected_result = f.read()
-    assert generate_diff(get_path(file1), get_path(file2), format_output).strip() == expected_result.strip()
+    assert generate_diff(get_path(file1), get_path(file2), format_output).strip() == \
+	expected_result.strip()
